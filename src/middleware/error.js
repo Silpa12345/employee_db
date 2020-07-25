@@ -14,7 +14,7 @@ const handler = (err, req, res) => {
 
 const convertError = (err, req, res, next) => {
      let convertedError = err;
-     console.log(err);
+     //console.log(err);
      if (err.error && err.error.name === 'ValidationError') {
           convertedError = new APIError({
                code: 'VAL-001',
@@ -24,7 +24,8 @@ const convertError = (err, req, res, next) => {
      } else if (!(err instanceof APIError)) {
           convertedError = new APIError({
                code: 500,
-               message: 'Something Unexpected happened!',
+               message:
+                    'Something Unexpected happened!Contact technical support',
                status: httpStatus.INTERNAL_SERVER_ERROR,
           });
      }

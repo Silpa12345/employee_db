@@ -1,6 +1,8 @@
 const employeeService = require('../services/EmployeeService');
 const _ = require('lodash');
 
+const APIError = require('../error/APIError');
+
 exports.get = async (req, res) => {
      const employees = await employeeService.getEmployees();
      res.json(employees);
@@ -15,8 +17,9 @@ exports.getSpecific = async (req, res, next) => {
      const employee = await employeeService.getSpecificEmployee(
           req.params.employeeId
      );
+
      if (_.isNull(employee)) {
-          next(new Error('Invalid credentials'));
+          next(new Error('Invalid ID'));
      } else {
           res.json(employee);
      }
@@ -27,7 +30,7 @@ exports.update = async (req, res, next) => {
           req.body
      );
      if (_.isNull(employee)) {
-          next(new Error('Invalid credential'));
+          next(new Error('Invalid ID'));
      } else {
           res.json(employee);
      }
@@ -37,7 +40,11 @@ exports.delete = async (req, res, next) => {
      const deleteEmployee = await employeeService.deleteEmployee(
           req.params.employeeId
      );
-     res.json(deleteEmployee);
+     if (_.isNull(deleteEmployee)) {
+          next(new Error('Invalid ID'));
+     } else {
+          res.json('deleted');
+     }
 };
 
 // exports.get = async (req, res) => {
